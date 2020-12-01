@@ -13,6 +13,17 @@ def printresults(data):
     count = newJSON["metadata"]["count"]
     print (str(count) + " event recorded")
 
+    # for each event, print place
+    for i in newJSON["features"]:
+        print(i["properties"]["place"])
+        print("--------------------")
+
+    # events that have magnitude over 4
+    for i in newJSON["features"]:
+        if i["properties"]["mag"] >= 4.0:
+            print("%2.1f" % i["properties"]["mag"], i["properties"]["place"])
+            print("---------------------------------")
+
 def main():
     urlData = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson"
     
@@ -20,10 +31,10 @@ def main():
     webUrl = urllib.request.urlopen(urlData)
     print("result code: " + str(webUrl.getcode()))
     if (webUrl.getcode() == 200):
-        data = webUrl.read()
+        data = webUrl.read().decode("utf-8")
         printresults(data)
     else:
-        print("Received error, cannot parse results")
+        print("Received error, cannot parse results" + str(webUrl.getcode()))
 
 
 
